@@ -1,8 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import Product from './product.model';
 
 @Injectable()
 export class ProductsService {
-  getHello(): string {
+  getProducts(): string {
     return 'products';
+  }
+
+  createProduct(product: Product) {
+    return;
   }
 }
