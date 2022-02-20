@@ -5,7 +5,9 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 import Product from './models/product.model';
 import { ProductsService } from './products.service';
@@ -31,5 +33,12 @@ export class ProductsController {
     this.validateProductsService.validateProduct(product);
     // if product is valid
     return this.productsService.createProduct(product);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('as-authenticated')
+  @HttpCode(HttpStatus.OK)
+  async getProductsAsAuthenticated(): Promise<any> {
+    return this.productsService.getProducts();
   }
 }
