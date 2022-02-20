@@ -1,16 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import Product from './models/product.model';
+import ProductValidators from './validators/product.validator';
 
 @Injectable()
 export class ValidateProductsService {
-  validateProduct(product: Product): void {
-    if (!product)
-      throw new HttpException('Product is not sent', HttpStatus.NOT_ACCEPTABLE);
+  constructor(private readonly productValidators: ProductValidators) {}
 
-    if (!product.id || !product.name)
-      throw new HttpException(
-        'Name and Id is incorrect',
-        HttpStatus.NOT_ACCEPTABLE,
-      );
+  validateProduct(product: Product): void {
+    const { error } =
+      this.productValidators.createProductSchema.validate(product);
+
+    if (error)
+      throw new HttpException(error.message, HttpStatus.NOT_ACCEPTABLE);
   }
 }
