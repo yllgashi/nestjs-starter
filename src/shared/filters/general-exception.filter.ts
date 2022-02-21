@@ -12,8 +12,10 @@ export class GeneralExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    // const status = exception.getStatus();
+    const status: number = exception.getStatus() || 400;
 
-    response.status(400).json(ResponseModel.error(exception.message));
+    response
+      .status(status)
+      .json(ResponseModel.error(exception.message || 'Internal server error'));
   }
 }
