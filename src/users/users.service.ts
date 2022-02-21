@@ -8,17 +8,24 @@ export class UsersService {
   private readonly users: User[] = [
     {
       id: '1',
-      username: 'john',
+      email: 'test1@test.com',
       password: 'changeme',
+      role: 'admin',
     },
     {
       id: '2',
-      username: 'maria',
+      email: 'test2@test.com',
       password: 'guess',
+      role: 'client',
     },
   ];
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find((user) => user.username === username);
+  async createUser(user: User): Promise<User> {
+    this.users.push(user);
+    return user;
+  }
+
+  async findByEmail(email: string): Promise<User | undefined> {
+    return this.users.find((user) => user.email === email);
   }
 }
