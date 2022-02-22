@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { CurrentUser } from 'src/auth/utils/current-user.decorator';
 import { JwtAuthGuard } from 'src/auth/utils/jwt-auth.guard';
+import { Roles } from 'src/auth/utils/role.decorator';
 import User from 'src/users/models/user.model';
 
 import Product from './models/product.model';
@@ -49,6 +50,21 @@ export class ProductsController {
   @HttpCode(HttpStatus.OK)
   async whoAmI(@CurrentUser() user: any): Promise<any> {
     return user;
-    // return 'VALID: response is sent only if request has authorization in header';
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('as-admin')
+  @Roles('admin')
+  @HttpCode(HttpStatus.OK)
+  async asAdmin(): Promise<any> {
+    return 'User is admin';
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('as-client')
+  @Roles('client')
+  @HttpCode(HttpStatus.OK)
+  async asClient(): Promise<any> {
+    return 'User is client';
   }
 }
