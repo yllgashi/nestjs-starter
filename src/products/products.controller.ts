@@ -7,7 +7,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/utils/jwt-auth.guard';
 
 import Product from './models/product.model';
 import { ProductsService } from './products.service';
@@ -39,6 +39,6 @@ export class ProductsController {
   @Get('as-authenticated')
   @HttpCode(HttpStatus.OK)
   async getProductsAsAuthenticated(): Promise<any> {
-    return this.productsService.getProducts();
+    return 'VALID: response is sent only if request has authorization in header';
   }
 }

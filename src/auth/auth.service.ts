@@ -3,24 +3,25 @@ import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthLogin } from './models/auth-login.model';
 import { AuthRegister } from './models/auth-register.model';
+import { ValidateAuthService } from './validate-auth.service';
+import User from 'src/users/models/user.model';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
+    private readonly usersService: UsersService,
+    private readonly validateAuthService: ValidateAuthService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async login(loginUser: AuthLogin) {
-    // validate user with joi
-    // ...
+    this.validateAuthService.validateLoginUser(loginUser);
 
-    const user = await this.validateUser(loginUser);
+    const user: User = await this.getUserByEmail(loginUser.email);
+    if (!user)
+      throw new HttpException('User does not exists', HttpStatus.NOT_FOUND);
 
-    const jwtData = {
-      email: user.email,
-      role: user.role,
-    };
+    const jwtData = { userId: user.id, email: user.email, role: user.role };
 
     return {
       access_token: this.jwtService.sign(jwtData),
@@ -28,35 +29,34 @@ export class AuthService {
   }
 
   async register(registerUser: AuthRegister) {
-    // validate user with joi
-    // ...
+    this.validateAuthService.validateRegisterUser(registerUser);
 
-    const user = await this.usersService.createUser({
+    const userExists: User = await this.getUserByEmail(registerUser.email);
+    if (userExists)
+      throw new HttpException('User already exists', HttpStatus.CONFLICT);
+
+    const user: User = await this.usersService.createUser({
       email: registerUser.email,
       password: registerUser.password,
       role: 'client',
       id: Date.now().toString(),
     });
 
-    await this.validateUser(user);
+    if (!user)
+      throw new HttpException(
+        'User is not created',
+        HttpStatus.SERVICE_UNAVAILABLE,
+      );
 
-    const jwtData = {
-      email: user.email,
-      role: user.role,
-    };
+    const jwtData = { userId: user.id, email: user.email, role: user.role };
 
     return {
       access_token: this.jwtService.sign(jwtData),
     };
   }
 
-  async validateUser(loginUser: AuthLogin): Promise<any> {
-    const user = await this.usersService.findByEmail(loginUser.email);
-
-    if (user && user.password === loginUser.password) {
-      const { password, ...result } = user;
-      return result;
-    }
-    throw new HttpException('Unauthorized access', HttpStatus.UNAUTHORIZED);
+  async getUserByEmail(email: string): Promise<any> {
+    const user = await this.usersService.findByEmail(email);
+    return user;
   }
 }
