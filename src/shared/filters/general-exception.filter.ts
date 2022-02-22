@@ -12,7 +12,7 @@ export class GeneralExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const status: number = exception.getStatus() || 400;
+    const status: number = exception.getStatus ? exception.getStatus() : 500;
 
     response
       .status(status)
