@@ -7,7 +7,9 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { CurrentUser } from 'src/auth/utils/current-user.decorator';
 import { JwtAuthGuard } from 'src/auth/utils/jwt-auth.guard';
+import User from 'src/users/models/user.model';
 
 import Product from './models/product.model';
 import { ProductsService } from './products.service';
@@ -40,5 +42,13 @@ export class ProductsController {
   @HttpCode(HttpStatus.OK)
   async getProductsAsAuthenticated(): Promise<any> {
     return 'VALID: response is sent only if request has authorization in header';
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('who-am-i')
+  @HttpCode(HttpStatus.OK)
+  async whoAmI(@CurrentUser() user: any): Promise<any> {
+    return user;
+    // return 'VALID: response is sent only if request has authorization in header';
   }
 }
