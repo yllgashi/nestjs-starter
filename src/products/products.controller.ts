@@ -10,7 +10,7 @@ import {
 import { CurrentUser } from 'src/auth/utils/current-user.decorator';
 import { JwtAuthGuard } from 'src/auth/utils/jwt-auth.guard';
 import { Roles } from 'src/auth/utils/role.decorator';
-import User from 'src/users/models/user.model';
+import { RolesGuard } from 'src/auth/utils/roles.guard';
 
 import Product from './models/product.model';
 import { ProductsService } from './products.service';
@@ -52,7 +52,7 @@ export class ProductsController {
     return user;
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('as-admin')
   @Roles('admin')
   @HttpCode(HttpStatus.OK)
@@ -60,7 +60,7 @@ export class ProductsController {
     return 'User is admin';
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('as-client')
   @Roles('client')
   @HttpCode(HttpStatus.OK)

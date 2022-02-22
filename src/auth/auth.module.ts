@@ -15,7 +15,7 @@ import AuthValidators from './validators/auth.validator';
     JwtModule.register({
       // secret: `${process.env.JWT_SECRET_KEY}`,
       secret: 'secret',
-      signOptions: { expiresIn: '500s' },
+      signOptions: { expiresIn: '120000s' },
     }),
   ],
   controllers: [AuthController],

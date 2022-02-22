@@ -10,13 +10,19 @@ export class UsersService {
       id: '1',
       email: 'test1@test.com',
       password: 'changeme',
-      role: 'admin',
+      roles: ['admin'],
     },
     {
       id: '2',
       email: 'test2@test.com',
       password: 'guess',
-      role: 'client',
+      roles: ['client'],
+    },
+    {
+      id: '3',
+      email: 'test3@test.com',
+      password: 'guess',
+      roles: ['client', 'admin'],
     },
   ];
 

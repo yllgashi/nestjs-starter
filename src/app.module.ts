@@ -7,7 +7,6 @@ import { SuccessInterceptor } from './shared/interceptors/success.interceptor';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { RolesGuard } from './auth/utils/role.guard';
 
 @Module({
   imports: [
@@ -25,10 +24,6 @@ import { RolesGuard } from './auth/utils/role.guard';
     {
       provide: APP_INTERCEPTOR,
       useClass: SuccessInterceptor,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
     },
   ],
 })

@@ -21,7 +21,7 @@ export class AuthService {
     if (!user)
       throw new HttpException('User does not exists', HttpStatus.NOT_FOUND);
 
-    const jwtData = { userId: user.id, email: user.email, role: user.role };
+    const jwtData = { userId: user.id, email: user.email, roles: user.roles };
 
     return {
       access_token: this.jwtService.sign(jwtData),
@@ -38,7 +38,7 @@ export class AuthService {
     const user: User = await this.usersService.createUser({
       email: registerUser.email,
       password: registerUser.password,
-      role: 'client',
+      roles: ['client'],
       id: Date.now().toString(),
     });
 
@@ -48,7 +48,7 @@ export class AuthService {
         HttpStatus.SERVICE_UNAVAILABLE,
       );
 
-    const jwtData = { userId: user.id, email: user.email, role: user.role };
+    const jwtData = { userId: user.id, email: user.email, roles: user.roles };
 
     return {
       access_token: this.jwtService.sign(jwtData),
