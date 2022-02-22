@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { Auth } from 'src/auth/utils/auth.decorator';
 import { CurrentUser } from 'src/auth/utils/current-user.decorator';
-import { Roles } from 'src/auth/utils/role.decorator';
+import { Roles } from 'src/auth/utils/roles.decorator';
 import { RolesGuard } from 'src/auth/utils/roles.guard';
 
 import Product from './models/product.model';
@@ -53,6 +53,7 @@ export class ProductsController {
   }
 
   @UseGuards(RolesGuard)
+  @Auth()
   @Get('as-admin')
   @Roles('admin')
   @HttpCode(HttpStatus.OK)
@@ -61,6 +62,7 @@ export class ProductsController {
   }
 
   @UseGuards(RolesGuard)
+  @Auth()
   @Get('as-client')
   @Roles('client')
   @HttpCode(HttpStatus.OK)
