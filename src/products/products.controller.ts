@@ -7,8 +7,8 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { Auth } from 'src/auth/utils/auth.decorator';
 import { CurrentUser } from 'src/auth/utils/current-user.decorator';
-import { JwtAuthGuard } from 'src/auth/utils/jwt-auth.guard';
 import { Roles } from 'src/auth/utils/role.decorator';
 import { RolesGuard } from 'src/auth/utils/roles.guard';
 
@@ -38,21 +38,21 @@ export class ProductsController {
     return this.productsService.createProduct(product);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Auth()
   @Get('as-authenticated')
   @HttpCode(HttpStatus.OK)
   async getProductsAsAuthenticated(): Promise<any> {
     return 'VALID: response is sent only if request has authorization in header';
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Auth()
   @Get('who-am-i')
   @HttpCode(HttpStatus.OK)
   async whoAmI(@CurrentUser() user: any): Promise<any> {
     return user;
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(RolesGuard)
   @Get('as-admin')
   @Roles('admin')
   @HttpCode(HttpStatus.OK)
@@ -60,7 +60,7 @@ export class ProductsController {
     return 'User is admin';
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(RolesGuard)
   @Get('as-client')
   @Roles('client')
   @HttpCode(HttpStatus.OK)
