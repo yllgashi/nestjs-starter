@@ -5,12 +5,9 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import { Auth } from 'src/auth/utils/auth.decorator';
 import { CurrentUser } from 'src/auth/utils/current-user.decorator';
-import { Roles } from 'src/auth/utils/roles.decorator';
-import { RolesGuard } from 'src/auth/utils/roles.guard';
 
 import Product from './models/product.model';
 import { ProductsService } from './products.service';
@@ -59,25 +56,22 @@ export class ProductsController {
     return userId;
   }
 
-  @Roles('admin')
-  @Auth()
+  @Auth('admin')
   @Get('as-admin')
   @HttpCode(HttpStatus.OK)
   async asAdmin(): Promise<any> {
     return 'User is admin';
   }
 
-  @Roles('client')
-  @Auth()
+  @Auth('client')
   @Get('as-client')
   @HttpCode(HttpStatus.OK)
   async asClient(): Promise<any> {
     return 'User is client';
   }
 
-  @Roles('client', 'admin')
-  @Auth()
-  @Get('as-client')
+  @Auth('client', 'admin')
+  @Get('as-both')
   @HttpCode(HttpStatus.OK)
   async asBoth(): Promise<any> {
     return 'User is admin/client';
