@@ -10,7 +10,7 @@ export class RolesGuard implements CanActivate {
       'roles',
       context.getHandler(),
     );
-
+    
     // if role is not specified in decorator
     if (!requiredRoles) return true;
 

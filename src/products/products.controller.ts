@@ -52,21 +52,27 @@ export class ProductsController {
     return user;
   }
 
-  @UseGuards(RolesGuard)
+  @Roles('admin')
   @Auth()
   @Get('as-admin')
-  @Roles('admin')
   @HttpCode(HttpStatus.OK)
   async asAdmin(): Promise<any> {
     return 'User is admin';
   }
 
-  @UseGuards(RolesGuard)
+  @Roles('client')
   @Auth()
   @Get('as-client')
-  @Roles('client')
   @HttpCode(HttpStatus.OK)
   async asClient(): Promise<any> {
     return 'User is client';
+  }
+
+  @Roles('client', 'admin')
+  @Auth()
+  @Get('as-client')
+  @HttpCode(HttpStatus.OK)
+  async asBoth(): Promise<any> {
+    return 'User is admin/client';
   }
 }
