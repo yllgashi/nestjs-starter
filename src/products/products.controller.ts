@@ -52,6 +52,13 @@ export class ProductsController {
     return user;
   }
 
+  @Auth()
+  @Get('my-id')
+  @HttpCode(HttpStatus.OK)
+  async getMId(@CurrentUser('userId') userId: any): Promise<any> {
+    return userId;
+  }
+
   @Roles('admin')
   @Auth()
   @Get('as-admin')
