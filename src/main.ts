@@ -1,8 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import {
-  DocumentBuilder,
-  SwaggerModule,
-} from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { GeneralExceptionFilter } from './shared/filters/general-exception.filter';
 
@@ -13,6 +10,7 @@ async function bootstrap() {
 
   // swagger
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Application name')
     .setDescription('Application description')
     .setVersion('1.0')

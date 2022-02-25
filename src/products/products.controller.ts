@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { Auth } from 'src/auth/utils/auth.decorator';
 import { CurrentUser } from 'src/auth/utils/current-user.decorator';
 
@@ -13,6 +14,7 @@ import Product from './models/product.model';
 import { ProductsService } from './products.service';
 import { ValidateProductsService } from './validate-products.service';
 
+@ApiBearerAuth()
 @Controller({ path: 'products' })
 export class ProductsController {
   constructor(
