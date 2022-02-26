@@ -5,6 +5,7 @@ import { SuccessInterceptor } from './shared/interceptors/success.interceptor';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -14,6 +15,16 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
+    }),
+    TypeOrmModule.forRoot({
+      type: 'mssql',
+      host: 'localhost',
+      port: 1434,
+      username: 'yllg',
+      password: 'yllg',
+      database: 'MyRestaurant',
+      entities: [],
+      synchronize: false,
     }),
   ],
   providers: [
