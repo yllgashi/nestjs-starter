@@ -16,16 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       isGlobal: true,
       cache: true,
     }),
-    TypeOrmModule.forRoot({
-      type: 'mssql',
-      host: 'localhost',
-      port: 1434,
-      username: 'yllg',
-      password: 'yllg',
-      database: 'MyRestaurant',
-      entities: [],
-      synchronize: false,
-    }),
+    TypeOrmModule.forRoot(),
   ],
   providers: [
     {
