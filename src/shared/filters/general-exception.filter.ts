@@ -9,12 +9,14 @@ export class GeneralExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const status: number = exception.getStatus ? exception.getStatus() : 500;
 
-    // call toString() method in case error is from class-validator
-    // in that case message is an array[] so we need to convert to string
-    const message = exception.getResponse().message.toString();
+    // check for HttpException exceptions
+    let message = exception.message;
 
-    response
-      .status(status)
-      .json(ResponseModel.error(message ?? 'Internal server error'));
+    // check for class-validator exceptions
+    message = exception.getResponse().message
+      ? exception.getResponse().message.toString()
+      : message;
+
+    response.status(status).json(ResponseModel.error(message));
   }
 }
