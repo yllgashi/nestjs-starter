@@ -3,20 +3,16 @@ import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthLogin } from './models/auth-login.model';
 import { AuthRegister } from './models/auth-register.model';
-import { ValidateAuthService } from './validate-auth.service';
 import User from 'src/users/models/user.model';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly validateAuthService: ValidateAuthService,
     private readonly jwtService: JwtService,
   ) {}
 
   async login(loginUser: AuthLogin) {
-    this.validateAuthService.validateLoginUser(loginUser);
-
     const user: User = await this.getUserByEmail(loginUser.email);
     if (!user)
       throw new HttpException('User does not exists', HttpStatus.NOT_FOUND);
@@ -29,8 +25,6 @@ export class AuthService {
   }
 
   async register(registerUser: AuthRegister) {
-    this.validateAuthService.validateRegisterUser(registerUser);
-
     const userExists: User = await this.getUserByEmail(registerUser.email);
     if (userExists)
       throw new HttpException('User already exists', HttpStatus.CONFLICT);
