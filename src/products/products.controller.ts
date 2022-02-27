@@ -72,4 +72,9 @@ export class ProductsController {
   async asBoth(): Promise<any> {
     return 'User is admin/client';
   }
+
+  @Get('work-with-database')
+  async workWithDatabase(): Promise<any> {
+    return this.productsService.workWithDatabase();
+  }
 }

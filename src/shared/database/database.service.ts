@@ -1,19 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as sql from 'mssql';
 
 import { dbconfig } from './db.config';
+import ProcedureResponse from './procedure-response.model';
 
 @Injectable()
 export class DatabaseService {
   constructor() {}
 
-  private async getPool() {}
+  async query(queryString) {
+    const pool = new sql.ConnectionPool(dbconfig);
+    await pool.connect();
+    const result = await pool.query(queryString);
+    pool.close();
+    return result.recordsets;
+  }
 
-  async execProcedure() {
-    let pool = await sql.connect(dbconfig.prod);
-    let products = await pool
-      .request()
-      .query('select * from Gastronomy.Product');
-    console.log(products);
+  async execProcedure(
+    procedureName: string,
+    inputParams: { name: string; value: any; type: sql.ISqlType }[] = [],
+    outputParams: { name: string; value: any; type: sql.ISqlType }[] = [],
+  ) {
+    const pool = new sql.ConnectionPool(dbconfig);
+    await pool.connect();
+
+    // create request
+    const request = await pool.request();
+    // add input params
+    inputParams.forEach((e) => request.input(e.name, e.type, e.value));
+    // add output params
+    outputParams.forEach((e) => request.output(e.name, e.type, e.value));
+    // execute procedure
+    const result = await request.execute(procedureName);
+    pool.close();
+
+    const procResponse: ProcedureResponse = {
+      result: result.recordset,
+      outputParams: result.output,
+    };
+
+    return procResponse;
   }
 }
