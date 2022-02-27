@@ -13,10 +13,12 @@ export class GeneralExceptionFilter implements ExceptionFilter {
     let message = exception.message;
 
     // check for class-validator exceptions
-    message = exception.getResponse().message
-      ? exception.getResponse().message.toString()
-      : message;
-
-    response.status(status).json(ResponseModel.error(message));
+    try {
+      message = exception.getResponse().message.toString();
+    } catch (e) {
+      message = message;
+    } finally {
+      response.status(status).json(ResponseModel.error(message));
+    }
   }
 }
