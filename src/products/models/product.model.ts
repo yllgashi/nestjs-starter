@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
-export default class Product {
+export class Product {
   @ApiProperty()
   @IsOptional()
   id: string;

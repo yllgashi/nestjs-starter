@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/shared/database/database.service';
-import Product from './models/product.model';
+import { Product } from './models/product.model';
 import * as sql from 'mssql';
 
 @Injectable()

@@ -7,10 +7,10 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { Auth } from 'src/auth/utils/auth.decorator';
-import { CurrentUser } from 'src/auth/utils/current-user.decorator';
+import { Auth } from 'src/shared/decorators/auth.decorator';
+import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 
-import Product from './models/product.model';
+import { Product } from './models/product.model';
 import { ProductsService } from './products.service';
 
 @ApiBearerAuth()
