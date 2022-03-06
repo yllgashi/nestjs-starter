@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/shared/database/database.service';
 import { Product } from './models/product.model';
-import * as sql from 'mssql';
 
 @Injectable()
 export class ProductsRepository {
@@ -26,8 +25,8 @@ export class ProductsRepository {
     let data = await this.databaseService.execProcedure(
       'dbo.usp_Table1_WithParams',
       [
-        { name: 'inputOne', value: 'tesst1', type: sql.VarChar(10) },
-        { name: 'inputTwo', value: 'tesst2', type: sql.VarChar(10) },
+        { name: 'inputOne', value: 'tesst1' },
+        { name: 'inputTwo', value: 'tesst2' },
       ],
     );
     return data.result;
@@ -39,10 +38,10 @@ export class ProductsRepository {
     let data = await this.databaseService.execProcedure(
       'dbo.usp_Table1_WithOutputParams',
       [
-        { name: 'inputOne', value: 'tesst1', type: sql.VarChar(10) },
-        { name: 'inputTwo', value: 'tesst2', type: sql.VarChar(10) },
+        { name: 'inputOne', value: 'tesst1' },
+        { name: 'inputTwo', value: 'tesst2' },
       ],
-      [{ name: 'outputOne', value: '', type: sql.VarChar(30) }],
+      [{ name: 'outputOne', value: '' }],
     );
     return data.outputParams['outputOne'];
   }

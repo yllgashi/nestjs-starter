@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as sql from 'mssql';
 
 import { dbconfig } from './db.config';
@@ -18,8 +18,8 @@ export class DatabaseService {
 
   async execProcedure(
     procedureName: string,
-    inputParams: { name: string; value: any; type: sql.ISqlType }[] = [],
-    outputParams: { name: string; value: any; type: sql.ISqlType }[] = [],
+    inputParams: { name: string; value: any }[] = [],
+    outputParams: { name: string; value: any }[] = [],
   ) {
     const pool = new sql.ConnectionPool(dbconfig);
     await pool.connect();
@@ -27,9 +27,9 @@ export class DatabaseService {
     // create request
     const request = await pool.request();
     // add input params
-    inputParams.forEach((e) => request.input(e.name, e.type, e.value));
+    inputParams.forEach((e) => request.input(e.name, e.value));
     // add output params
-    outputParams.forEach((e) => request.output(e.name, e.type, e.value));
+    outputParams.forEach((e) => request.output(e.name, e.value));
     // execute procedure
     const result = await request.execute(procedureName);
     pool.close();
