@@ -1,49 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from 'src/shared/database/database.service';
 import { Product } from './models/product.model';
-import * as sql from 'mssql';
+import { ProductsRepository } from './products.repository';
 
 @Injectable()
 export class ProductsService {
-  products: Product[] = [new Product('1', 'Test1'), new Product('2', 'Test2')];
-
-  constructor(private databaseService: DatabaseService) {}
+  constructor(private productsRepository: ProductsRepository) {}
 
   async getProducts() {
-    return [...this.products];
+    return this.productsRepository.getProducts();
   }
 
-  // 1
-  // exec proc without params
-  // async workWithDatabase(): Promise<Product[]> {
-  //   let data = await this.databaseService.execProcedure(
-  //     'Gastronomy.usp_Product_GetAll',
-  //   );
-  //   return [...data.recordsets[0]];
-  // }
+  async callProcWithoutParams() {
+    return this.productsRepository.callProcWithoutParams();
+  }
 
-  // 2
-  // exec proc with input params
-  // async workWithDatabase(): Promise<any> {
-  //   let data = await this.databaseService.execProcedure('dbo.usp_test_IO', [
-  //     { name: 'inputOne', value: 'tesst1', type: sql.VarChar(10) },
-  //     { name: 'inputTwo', value: 'tesst2', type: sql.VarChar(10) },
-  //   ]);
-  //   return data.result;
-  // }
+  async callProcWithParams() {
+    return this.productsRepository.callProcWithParams();
+  }
 
-  // 3
-  // exec proc with output params
-  async workWithDatabase(): Promise<any> {
-    let data = await this.databaseService.execProcedure(
-      'dbo.usp_test_IO',
-      [
-        { name: 'inputOne', value: 'tesst1', type: sql.VarChar(10) },
-        { name: 'inputTwo', value: 'tesst2', type: sql.VarChar(10) },
-      ],
-      [{ name: 'outputOne', value: '', type: sql.VarChar(30) }],
-    );
-    return data.outputParams['outputOne'];
+  async callProcWithOutputParams() {
+    return this.productsRepository.callProcWithOutputParams();
   }
 
   createProduct(product: Product) {

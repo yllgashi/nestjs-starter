@@ -73,8 +73,21 @@ export class ProductsController {
     return 'User is admin/client';
   }
 
-  @Get('work-with-database')
-  async workWithDatabase(): Promise<any> {
-    return this.productsService.workWithDatabase();
+  // test database
+  @Get('without-params')
+  async callProcWithoutParams(): Promise<any> {
+    return this.productsService.callProcWithoutParams();
+  }
+
+  // test database
+  @Get('with-params')
+  async callProcWithParams(): Promise<any> {
+    return this.productsService.callProcWithParams();
+  }
+
+  // test database
+  @Get('with-output-params')
+  async callProcWithOutputParams(): Promise<any> {
+    return this.productsService.callProcWithOutputParams();
   }
 }
